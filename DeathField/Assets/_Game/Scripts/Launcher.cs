@@ -15,6 +15,8 @@ namespace DeathField
         {
             PhotonNetwork.ConnectUsingSettings();
             JoinRoomAction += JoinRoom;
+
+            Input.multiTouchEnabled = true;
         }
 
         private void OnDestroy()
@@ -36,8 +38,6 @@ namespace DeathField
             base.OnJoinedLobby();
 
             Debug.Log("Join Lobby");
-
-
         }
 
         public override void OnJoinedRoom()
