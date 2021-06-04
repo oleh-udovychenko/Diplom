@@ -8,6 +8,8 @@ namespace DeathField
     public class PlayerController : MonoBehaviour
     {
         [SerializeField] private Rigidbody _rigidbody;
+        [SerializeField] private List<Gun> _guns;
+        [SerializeField] private Camera _camera;
 
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _rotationSpeed;
@@ -16,6 +18,8 @@ namespace DeathField
 
         private PhotonView _pv;
 
+        private Gun _activeGun;
+
         private Vector3 _moveDirection = new Vector3();
         private Vector3 _rotateDirection = new Vector3();
 
@@ -23,6 +27,13 @@ namespace DeathField
         {
             _pv = GetComponent<PhotonView>();
             _joystickControl = JoystickController.Instance;
+
+            if (_pv.IsMine)
+                ImprovedStaticButton.OnPointerClickEvent += Shot;
+            else
+                Destroy(_camera.gameObject);
+
+            _activeGun = _guns[0];
         }
 
         private void Update()
@@ -41,6 +52,12 @@ namespace DeathField
 
             Move(_moveDirection);
             Rotate(_rotateDirection);
+        }
+
+        private void OnDisable()
+        {
+            if (_pv.IsMine)
+                ImprovedStaticButton.OnPointerClickEvent -= Shot;
         }
 
         private Vector3 GetCurrentDirection(Vector3 direction)
@@ -75,6 +92,11 @@ namespace DeathField
         {
             if (direction != Vector3.zero)
                 transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(direction), _rotationSpeed * Time.fixedDeltaTime);
+        }
+
+        private void Shot()
+        {
+            _activeGun.Shot();
         }
     }
 }

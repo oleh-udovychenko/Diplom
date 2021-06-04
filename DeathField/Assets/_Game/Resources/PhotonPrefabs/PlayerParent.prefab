@@ -209,10 +209,10 @@ MonoBehaviour:
   _skins:
   - {fileID: 2225671542366409239}
   - {fileID: 3633972679746474237}
-  _bullet: {fileID: 0}
+  _bullet: {fileID: 6900820546856491010, guid: 2c6152820f2f707419af3df53cc94399, type: 3}
   _shotPoint: {fileID: 6058071952421088811}
   _damage: {x: 50, y: 75}
-  _rateOfFire: 1.5
+  _rateOfFire: 2
 --- !u!1 &4806817134532845349
 GameObject:
   m_ObjectHideFlags: 0
@@ -295,10 +295,10 @@ MonoBehaviour:
   - {fileID: 8305296455307654768}
   - {fileID: 5494943354471949329}
   - {fileID: 2192924910753970209}
-  _bullet: {fileID: 0}
+  _bullet: {fileID: 6900820546856491010, guid: 2c6152820f2f707419af3df53cc94399, type: 3}
   _shotPoint: {fileID: 3538440808816574924}
   _damage: {x: 5, y: 10}
-  _rateOfFire: 0.1
+  _rateOfFire: 0.25
 --- !u!1 &7017248294229037374
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,6 +372,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 5627811077892554946}
+  _guns:
+  - {fileID: 5406075989159461832}
+  - {fileID: 4447158946446996130}
+  - {fileID: 1588949638203472140}
+  _camera: {fileID: 7205989055331896377}
   _moveSpeed: 5
   _rotationSpeed: 5
 --- !u!136 &7808886799815809605
@@ -640,10 +645,10 @@ MonoBehaviour:
   - {fileID: 1336048618117830840}
   - {fileID: 64200890563840877}
   - {fileID: 401869802656866522}
-  _bullet: {fileID: 0}
+  _bullet: {fileID: 6900820546856491010, guid: 2c6152820f2f707419af3df53cc94399, type: 3}
   _shotPoint: {fileID: 7520142746847479228}
   _damage: {x: 3, y: 10}
-  _rateOfFire: 0.5
+  _rateOfFire: 1
 --- !u!1 &8578720443413113721
 GameObject:
   m_ObjectHideFlags: 0
