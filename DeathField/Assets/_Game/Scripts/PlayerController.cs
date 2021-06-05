@@ -9,8 +9,11 @@ namespace DeathField
     {
         #region SerializeFields
         [SerializeField] private Rigidbody _rigidbody;
-        [SerializeField] private List<Gun> _guns;
+        [SerializeField] private RagdollController _ragdoll;
         [SerializeField] private Camera _camera;
+
+        [SerializeField] private Rigidbody _gunRigidbody;
+        [SerializeField] private List<Gun> _guns;
 
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _rotationSpeed;
@@ -48,7 +51,7 @@ namespace DeathField
 
         private void Update()
         {
-            if (!_pv.IsMine)
+            if (!_pv.IsMine || _isDead)
                 return;
 
             _moveDirection = GetCurrentDirection(_joystickControl.GetDirection(JoystickController.Joysticks.Move));
@@ -57,7 +60,7 @@ namespace DeathField
 
         private void FixedUpdate()
         {
-            if (!_pv.IsMine)
+            if (!_pv.IsMine || _isDead)
                 return;
 
             Move(_moveDirection);
@@ -108,18 +111,26 @@ namespace DeathField
 
         private void Shot()
         {
+            if (_isDead)
+                return;
+
             _activeGun.Shot();
         }
 
         private void Die()
         {
-
+            _ragdoll.SetActiveRagdoll(true);
+            _gunRigidbody.isKinematic = false;
+            Debug.Log("Die");
         }
         #endregion
 
         #region PublicMethods
         public void GetDamege(float value)
         {
+            if (_isDead)
+                return;
+
             _health -= value;
 
             if (_isDead)

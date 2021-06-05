@@ -118,6 +118,7 @@ GameObject:
   - component: {fileID: 8294229872609318738}
   - component: {fileID: 8294229872609318737}
   - component: {fileID: 2925618260420301095}
+  - component: {fileID: 1715318969663172385}
   m_Layer: 0
   m_Name: BulletPistol
   m_TagString: Untagged
@@ -191,9 +192,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c73ec83b9f1f734dbefdd572acf44d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lifeTime: 3
+  _lifeTime: 2
   _speed: 7
   _damage: 0
+--- !u!65 &1715318969663172385
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8294229872609318736}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.05, y: 0.05, z: 0.12}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &8294229871209380192
 PrefabInstance:
   m_ObjectHideFlags: 0
