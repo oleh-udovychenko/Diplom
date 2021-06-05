@@ -7,13 +7,17 @@ namespace DeathField
 {
     public class PlayerController : MonoBehaviour
     {
+        #region SerializeFields
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private List<Gun> _guns;
         [SerializeField] private Camera _camera;
 
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _rotationSpeed;
+        [SerializeField] private float _health;
+        #endregion
 
+        #region PrivateFields
         private JoystickController _joystickControl;
 
         private PhotonView _pv;
@@ -22,7 +26,13 @@ namespace DeathField
 
         private Vector3 _moveDirection = new Vector3();
         private Vector3 _rotateDirection = new Vector3();
+        #endregion
 
+        #region PrivateProperty
+        private bool _isDead => _health <= 0f;
+        #endregion
+
+        #region UnityMethods
         private void Start()
         {
             _pv = GetComponent<PhotonView>();
@@ -59,7 +69,9 @@ namespace DeathField
             if (_pv.IsMine)
                 ImprovedStaticButton.OnPointerClickEvent -= Shot;
         }
+        #endregion
 
+        #region PrivateMethods
         private Vector3 GetCurrentDirection(Vector3 direction)
         {
             Vector3 currentDirection = direction;
@@ -98,5 +110,21 @@ namespace DeathField
         {
             _activeGun.Shot();
         }
+
+        private void Die()
+        {
+
+        }
+        #endregion
+
+        #region PublicMethods
+        public void GetDamege(float value)
+        {
+            _health -= value;
+
+            if (_isDead)
+                Die();
+        }
+        #endregion
     }
 }
