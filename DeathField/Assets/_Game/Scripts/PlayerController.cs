@@ -10,6 +10,8 @@ namespace DeathField
         #region SerializeFields
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private RagdollController _ragdoll;
+        [SerializeField] private IKController _ik;
+        [SerializeField] private Animator _animator;
         [SerializeField] private Camera _camera;
 
         [SerializeField] private Rigidbody _gunRigidbody;
@@ -17,11 +19,11 @@ namespace DeathField
 
         [SerializeField] private float _moveSpeed;
         [SerializeField] private float _rotationSpeed;
-        [SerializeField] private float _health;
+        [SerializeField] private float _maxHealth;
         #endregion
 
         #region PrivateFields
-        private JoystickController _joystickControl;
+        private ControlManager _controlManager;
 
         private PhotonView _pv;
 
@@ -29,6 +31,8 @@ namespace DeathField
 
         private Vector3 _moveDirection = new Vector3();
         private Vector3 _rotateDirection = new Vector3();
+
+        private int _health;
         #endregion
 
         #region PrivateProperty
@@ -39,14 +43,31 @@ namespace DeathField
         private void Start()
         {
             _pv = GetComponent<PhotonView>();
-            _joystickControl = JoystickController.Instance;
+            _controlManager = ControlManager.Instance;
 
             if (_pv.IsMine)
+            {
                 ImprovedStaticButton.OnPointerClickEvent += Shot;
+
+                for (int i = 0; i < _guns.Count; i++)
+                {
+                    var currentIndex = i;
+
+                    _controlManager.SwitchWeaponButtons[i].onClick.AddListener(delegate
+                    {
+                        SwitchWeapon(currentIndex);
+                    });
+                }
+            }
             else
                 Destroy(_camera.gameObject);
 
             _activeGun = _guns[0];
+            SwitchWeapon(0);
+
+            _health = (int)_maxHealth;
+            _controlManager.SetHealth(_health, (int)_maxHealth);
+
         }
 
         private void Update()
@@ -54,8 +75,8 @@ namespace DeathField
             if (!_pv.IsMine || _isDead)
                 return;
 
-            _moveDirection = GetCurrentDirection(_joystickControl.GetDirection(JoystickController.Joysticks.Move));
-            _rotateDirection = GetCurrentDirection(_joystickControl.GetDirection(JoystickController.Joysticks.Attack));
+            _moveDirection = GetCurrentDirection(_controlManager.GetDirection(ControlManager.Joysticks.Move));
+            _rotateDirection = GetCurrentDirection(_controlManager.GetDirection(ControlManager.Joysticks.Attack));
         }
 
         private void FixedUpdate()
@@ -90,16 +111,15 @@ namespace DeathField
             {
                 _rigidbody.velocity = Vector3.zero;
                 _rigidbody.angularVelocity = Vector3.zero;
-                //stay anim
+                _animator.SetInteger("State", 0);
             }
             else
             {
                 _rigidbody.MovePosition(transform.position + (Time.deltaTime * _moveSpeed * direction.normalized));
+                _animator.SetInteger("State", 1);
 
                 if (_rotateDirection == Vector3.zero)
                     Rotate(direction);
-
-                //move anim
             }
         }
 
@@ -115,6 +135,17 @@ namespace DeathField
                 return;
 
             _activeGun.Shot();
+            _controlManager.SetBulletsText(_activeGun.BulletsCount);
+        }
+
+        private void SwitchWeapon(int index)
+        {
+            _activeGun.gameObject.SetActive(false);
+            _activeGun = _guns[index];
+            _activeGun.gameObject.SetActive(true);
+
+            _ik.SetIKPoints(_activeGun.RightHandPoint, _activeGun.LeftHandPoint);
+            _controlManager.SetBulletsText(_activeGun.BulletsCount);
         }
 
         private void Die()
@@ -131,7 +162,8 @@ namespace DeathField
             if (_isDead)
                 return;
 
-            _health -= value;
+            _health -= (int)value;
+            _controlManager.SetHealth(_health, (int)_maxHealth);
 
             if (_isDead)
                 Die();

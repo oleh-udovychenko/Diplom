@@ -1,18 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DeathField
 {
-    public class JoystickController : MonoBehaviour
+    public class ControlManager : MonoBehaviour
     {
-        public static JoystickController Instance { get; private set; }
+        public static ControlManager Instance { get; private set; }
 
         [SerializeField] private Joystick _moveJoystick;
         [SerializeField] private Joystick _attackJoystick;
 
-        public Joystick MoveJoystick => _moveJoystick;
+        [SerializeField] private Text _healthText;
+        [SerializeField] private Text _bulletsText;
 
+        [SerializeField] private List<Button> _switchWeaponButtons;
+
+        public Joystick MoveJoystick => _moveJoystick;
+        public List<Button> SwitchWeaponButtons => _switchWeaponButtons;
 
         private void Awake()
         {
@@ -37,6 +43,23 @@ namespace DeathField
         {
             Move,
             Attack,
+        }
+
+        public void SetHealth(int nowValue, int maxValue)
+        {
+            _healthText.text = nowValue + "/" + maxValue;
+        }
+
+        public void SetBulletsText(int value)
+        {
+            _bulletsText.text = value.ToString();
+        }
+
+        public enum SwitchWeapons
+        {
+            Assault,
+            Pistol,
+            Sniper,
         }
     }
 }

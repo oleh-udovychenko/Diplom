@@ -10,7 +10,7 @@ namespace DeathField
     {
         public override void Shot()
         {
-            if (Time.time - _lastShotTime <= _rateOfFire)
+            if (_bullets == 0 || Time.time - _lastShotTime <= _rateOfFire)
                 return;
 
             _lastShotTime = Time.time;
@@ -18,6 +18,7 @@ namespace DeathField
             var bullet = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "BulletPistol"), _shotPoint.position, _shotPoint.rotation).GetComponent<Bullet>();
 
             bullet.SetGunSettings(Random.Range(_damage.minValue, _damage.maxValue));
+            _bullets--;
         }
     }
 }

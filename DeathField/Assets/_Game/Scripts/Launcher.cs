@@ -11,6 +11,8 @@ namespace DeathField
     {
         public static Action<RoomInfo> JoinRoomAction;
 
+        [SerializeField] private MenuController _menu;
+
         private void Start()
         {
             PhotonNetwork.ConnectUsingSettings();
@@ -45,7 +47,7 @@ namespace DeathField
             base.OnJoinedRoom();
 
             Debug.Log("Join Room");
-            UIController.Instanse.OpenPage(UIController.Pages.Room);
+            _menu.OpenPage(MenuController.Pages.Room);
         }
 
         public override void OnCreateRoomFailed(short returnCode, string message)
@@ -60,7 +62,7 @@ namespace DeathField
         {
             base.OnLeftRoom();
 
-            UIController.Instanse.OpenPage(UIController.Pages.Title);
+            _menu.OpenPage(MenuController.Pages.Title);
             Debug.Log("Leave Room");
         }
 
@@ -68,7 +70,7 @@ namespace DeathField
         {
             base.OnRoomListUpdate(roomList);
 
-            UIController.Instanse.UpdateRoomItems(roomList);
+            _menu.UpdateRoomItems(roomList);
         }
 
         public void CreateRoom(string name)
@@ -80,12 +82,12 @@ namespace DeathField
         public void LiaveRoom()
         {
             PhotonNetwork.LeaveRoom();
-            UIController.Instanse.OpenPage(UIController.Pages.Loading);
+            _menu.OpenPage(MenuController.Pages.Loading);
         }
 
         public void JoinRoom(RoomInfo info)
         {
-            UIController.Instanse.OpenPage(UIController.Pages.Loading);
+            _menu.OpenPage(MenuController.Pages.Loading);
             PhotonNetwork.JoinRoom(info.Name);
         }
 

@@ -6,10 +6,8 @@ using UnityEngine.UI;
 
 namespace DeathField
 {
-    public class UIController : MonoBehaviour
+    public class MenuController : MonoBehaviour
     {
-        public static UIController Instanse { get; private set; }
-
         [SerializeField] private Launcher _launcher;
 
         [SerializeField] private GameObject _titleMenu;
@@ -24,12 +22,6 @@ namespace DeathField
 
         [SerializeField] private RectTransform _roonListField;
         [SerializeField] private RoomListItem _roomListItemPrefab;
-
-        private void Awake()
-        {
-            if (Instanse == null)
-                Instanse = this;
-        }
 
         public void OpenPage(Pages page)
         {
